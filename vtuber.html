@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#121117" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%A7%91%E2%80%8D%F0%9F%8E%A4%3C/text%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="thumbs/千駄ヶ谷渋.png" />
+  <title>手機 VTuber・VTuber 控制台</title>
+  <script type="module" crossorigin src="./assets/vtuber-Bx8AxsXl.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/phone-CGs2u6xk.js">
+  <link rel="stylesheet" crossorigin href="./assets/phone-DROpZ-zd.css">
+</head>
+<body class="vt-page">
+  <div id="stage"></div>
+  <video id="cam" class="pip" playsinline muted hidden></video>
+
+  <header class="bar">
+    <span class="pill" id="state" data-kind="idle">載入角色中…</span>
+    <span class="rec-time" id="rec-time" hidden>● 00:00</span>
+    <a class="home" href="./">← 首頁</a>
+  </header>
+
+  <div class="flash" id="flash" hidden></div>
+  <p class="toast" id="toast" hidden></p>
+
+  <div class="vt-actions">
+    <button class="primary big" id="start">📷 開始捕捉</button>
+    <div class="row" id="live-row" hidden>
+      <button id="calib">校正正面</button>
+      <button id="stop">停止捕捉</button>
+    </div>
+  </div>
+
+  <nav class="dock">
+    <button data-sheet="models"><span>🧍</span>角色</button>
+    <button data-sheet="expr"><span>😊</span>表情</button>
+    <button data-sheet="bg"><span>🖼️</span>背景</button>
+    <button id="photo"><span>📸</span>拍照</button>
+    <button id="rec"><span id="rec-ico">⏺</span><b id="rec-label">錄影</b></button>
+    <button data-sheet="settings"><span>⚙️</span>設定</button>
+  </nav>
+
+  <section class="sheet" id="sheet" hidden>
+    <div class="sheet-head"><b id="sheet-title"></b><button id="sheet-close" aria-label="關閉">✕</button></div>
+    <div class="sheet-body" id="sheet-models" data-title="選角色"><div class="grid" id="models"></div></div>
+    <div class="sheet-body" id="sheet-expr" data-title="表情（再點一次取消）"><div class="grid small" id="exprs"></div></div>
+    <div class="sheet-body" id="sheet-bg" data-title="背景"><div class="grid" id="bgs"></div></div>
+    <div class="sheet-body" id="sheet-settings" data-title="設定">
+      <p class="label">鏡頭距離</p>
+      <div class="seg" id="shots">
+        <button data-shot="bust">肖像</button><button data-shot="waist">腰部以上</button><button data-shot="full">全身</button>
+      </div>
+      <label class="check"><input type="checkbox" id="mirror" checked /> 鏡像（像照鏡子一樣）</label>
+      <label class="check"><input type="checkbox" id="lip" /> 嘴巴跟著麥克風的聲音動（錄影時也會錄到聲音）</label>
+      <label class="check" id="body-row"><input type="checkbox" id="body" /> 也抓上半身（比較耗電、手機會變熱）</label>
+      <label class="check"><input type="checkbox" id="pip" /> 顯示鏡頭畫面（左上角）</label>
+      <p class="hint">手機很燙、很卡的時候：關掉「上半身」，或把手機插上充電、拿掉手機殼。</p>
+    </div>
+  </section>
+</body>
+</html>
