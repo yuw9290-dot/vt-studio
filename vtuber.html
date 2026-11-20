@@ -7,9 +7,9 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%A7%91%E2%80%8D%F0%9F%8E%A4%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="thumbs/千駄ヶ谷渋.png" />
   <title>手機 VTuber・VTuber 控制台</title>
-  <script type="module" crossorigin src="./assets/vtuber-Bx8AxsXl.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/phone-CGs2u6xk.js">
-  <link rel="stylesheet" crossorigin href="./assets/phone-DROpZ-zd.css">
+  <script type="module" crossorigin src="./assets/vtuber-BEtCnDtz.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/phone-aHxHej4a.js">
+  <link rel="stylesheet" crossorigin href="./assets/phone-DQHIrzlG.css">
 </head>
 <body class="vt-page">
   <div id="stage"></div>
@@ -27,6 +27,7 @@
   <div class="vt-actions">
     <button class="primary big" id="start">📷 開始捕捉</button>
     <div class="row" id="live-row" hidden>
+      <button id="flip">🔄 前／後</button>
       <button id="calib">校正正面</button>
       <button id="stop">停止捕捉</button>
     </div>
@@ -53,7 +54,11 @@
       </div>
       <label class="check"><input type="checkbox" id="mirror" checked /> 鏡像（像照鏡子一樣）</label>
       <label class="check"><input type="checkbox" id="lip" /> 嘴巴跟著麥克風的聲音動（錄影時也會錄到聲音）</label>
-      <label class="check" id="body-row"><input type="checkbox" id="body" /> 也抓上半身（比較耗電、手機會變熱）</label>
+      <p class="label">捕捉範圍</p>
+      <div class="seg" id="modes">
+        <button data-mode="face">只有臉</button><button data-mode="body">上半身</button><button data-mode="hands">＋手</button><button data-mode="full">全身</button>
+      </div>
+      <p class="hint" id="mode-hint"></p>
       <label class="check"><input type="checkbox" id="pip" /> 顯示鏡頭畫面（左上角）</label>
       <p class="hint">手機很燙、很卡的時候：關掉「上半身」，或把手機插上充電、拿掉手機殼。</p>
     </div>
