@@ -7,9 +7,10 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%A7%91%E2%80%8D%F0%9F%8E%A4%3C/text%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="thumbs/千駄ヶ谷渋.png" />
   <title>手機 VTuber・VTuber 控制台</title>
-  <script type="module" crossorigin src="./assets/vtuber-BEtCnDtz.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/phone-aHxHej4a.js">
-  <link rel="stylesheet" crossorigin href="./assets/phone-DQHIrzlG.css">
+  <script type="module" crossorigin src="./assets/vtuber-BFVfvkPV.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/phone-BZ4PH8wU.js">
+  <link rel="modulepreload" crossorigin href="./assets/phonecam-FXlai_eS.js">
+  <link rel="stylesheet" crossorigin href="./assets/phone-Bj1UAY7K.css">
 </head>
 <body class="vt-page">
   <div id="stage"></div>
@@ -18,6 +19,7 @@
   <header class="bar">
     <span class="pill" id="state" data-kind="idle">載入角色中…</span>
     <span class="rec-time" id="rec-time" hidden>● 00:00</span>
+    <button class="pill sync-pill" id="sync-pill" hidden>💻 已連電腦</button>
     <a class="home" href="./">← 首頁</a>
   </header>
 
@@ -26,6 +28,10 @@
 
   <div class="vt-actions">
     <button class="primary big" id="start">📷 開始捕捉</button>
+    <input type="file" id="video-file" accept="video/*" hidden />
+    <input type="file" id="model-file" accept=".vrm" hidden />
+    <input type="file" id="motion-file" accept=".vrma" hidden />
+    <input type="file" id="bg-file" accept="image/*" hidden />
     <div class="row" id="live-row" hidden>
       <button id="flip">🔄 前／後</button>
       <button id="calib">校正正面</button>
@@ -36,6 +42,7 @@
   <nav class="dock">
     <button data-sheet="models"><span>🧍</span>角色</button>
     <button data-sheet="expr"><span>😊</span>表情</button>
+    <button data-sheet="motions"><span>💃</span>動作</button>
     <button data-sheet="bg"><span>🖼️</span>背景</button>
     <button id="photo"><span>📸</span>拍照</button>
     <button id="rec"><span id="rec-ico">⏺</span><b id="rec-label">錄影</b></button>
@@ -44,9 +51,29 @@
 
   <section class="sheet" id="sheet" hidden>
     <div class="sheet-head"><b id="sheet-title"></b><button id="sheet-close" aria-label="關閉">✕</button></div>
-    <div class="sheet-body" id="sheet-models" data-title="選角色"><div class="grid" id="models"></div></div>
+    <div class="sheet-body" id="sheet-models" data-title="選角色"><div class="grid" id="models"></div>
+      <p class="hint">「＋ 匯入」的角色只存在這支手機的瀏覽器裡，不會上傳。角色檔可以在 VRoid Hub、BOOTH 等網站下載（.vrm）。</p></div>
+    <div class="sheet-body" id="sheet-motions" data-title="動作"><div class="grid small" id="motions"></div>
+      <p class="hint">捕捉身體時，手臂、腳會跟著你；只捕捉臉時，動作會照常播放。匯入的動作（.vrma）只存在這支手機裡。<br>坐著、女僕待機、被抓起來：Motions from Desktop Homunculus by notelm, CC BY 4.0</p></div>
     <div class="sheet-body" id="sheet-expr" data-title="表情（再點一次取消）"><div class="grid small" id="exprs"></div></div>
-    <div class="sheet-body" id="sheet-bg" data-title="背景"><div class="grid" id="bgs"></div></div>
+    <div class="sheet-body" id="sheet-bg" data-title="背景"><div class="grid" id="bgs"></div>
+      <p class="hint">匯入照片當背景：寬是高的 2 倍的圖片（360° 全景照）會變成可以轉的全景背景。</p></div>
+    <div class="sheet-body" id="sheet-sync" data-title="跟電腦互傳">
+      <div id="sync-off">
+        <p class="hint">電腦控制台：「👥 連線」→「📲 跟手機互傳」，用手機相機掃 QR code 就會自動連上。或在這裡輸入電腦上的代碼：</p>
+        <div class="code-row"><input id="sync-code" maxlength="5" placeholder="代碼" autocomplete="off" autocapitalize="characters" spellcheck="false" /><button class="primary" id="sync-go">連線</button></div>
+      </div>
+      <div id="sync-on" hidden>
+        <p class="sync-ok">✅ 已連上電腦</p>
+        <ul class="hint">
+          <li>在電腦上勾選角色、動作、背景，按「傳到手機」。收到的會出現在各自的清單（有 ⭐ 的就是），斷線之後也還在。</li>
+          <li>拍照、錄影之後按「💻 傳到電腦」，會存到電腦專案的 photos 資料夾。</li>
+        </ul>
+        <button id="sync-end">中斷連線</button>
+      </div>
+      <p class="hint" id="sync-state"></p>
+      <ul class="sync-log" id="sync-log"></ul>
+    </div>
     <div class="sheet-body" id="sheet-settings" data-title="設定">
       <p class="label">鏡頭距離</p>
       <div class="seg" id="shots">
@@ -60,7 +87,10 @@
       </div>
       <p class="hint" id="mode-hint"></p>
       <label class="check"><input type="checkbox" id="pip" /> 顯示鏡頭畫面（左上角）</label>
-      <p class="hint">手機很燙、很卡的時候：關掉「上半身」，或把手機插上充電、拿掉手機殼。</p>
+      <button class="setting-btn" id="sync-btn">💻 跟電腦互傳（電腦的角色傳過來、照片傳回電腦）</button>
+      <button class="setting-btn" id="video-test">🎬 用影片檔測試（不開鏡頭，角色跟著影片裡的人動）</button>
+      <a class="setting-link" href="privacy.html">🔒 隱私與安全（鏡頭畫面去了哪裡？）</a>
+      <p class="hint">手機很燙、很卡的時候：捕捉範圍選「只有臉」，或把手機插上充電、拿掉手機殼。</p>
     </div>
   </section>
 </body>
